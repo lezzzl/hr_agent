@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hr-agent-app"
+version = "0.1.0"
+description = "LangGraph HR screening agent"
+requires-python = ">=3.11"
+dependencies = [
+    "langchain-core",
+    "langgraph",
+    "langgraph-checkpoint",
+    "langchain-openrouter",
+    "python-dotenv",
+    "langsmith",
+]
+
+[tool.setuptools.packages.find]
+include = ["hr_agent_app*"]

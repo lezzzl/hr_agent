@@ -1,0 +1,7 @@
+langchain-core
+langgraph
+langgraph-checkpoint
+langgraph-cli[inmem]
+langchain-openrouter
+python-dotenv
+langsmith
