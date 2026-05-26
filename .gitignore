@@ -3,4 +3,7 @@ __pycache__/
 *.pyc
 .env
 .ipynb_checkpoints/
-.langgraph_api
+.DS_Store
+.langgraph_api/
+.vectorstore/
+.cache/

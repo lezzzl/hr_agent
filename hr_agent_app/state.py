@@ -9,7 +9,7 @@ class InterviewState(TypedDict, total=False):
 
     interview_started: bool
     interview_finished: bool
-    guardrail_status: str | None
+    input_status: str | None
 
     current_step_id: int
     candidate_profile: dict
