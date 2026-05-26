@@ -6,8 +6,20 @@ from hr_agent_app.rag.retriever import format_documents, search_hr_knowledge
 @tool
 def search_hr_documents(question: str) -> str:
     """
-    Use this tool to answer questions about hiring process, interview stages,
-    company policies, work format, ML team roles, interview timelines and FAQ.
+    Используй этот инструмент, чтобы искать информацию в базе знаний HR-бота.
+
+    Инструмент подходит для вопросов о:
+    - процессе найма;
+    - этапах интервью;
+    - сроках обратной связи;
+    - политиках компании;
+    - формате работы;
+    - ролях в ML-команде;
+    - требованиях к кандидатам;
+    - FAQ по интервью.
+
+    На вход передаётся вопрос кандидата.
+    На выходе возвращаются релевантные фрагменты документов из базы знаний.
     """
     try:
         documents = search_hr_knowledge(question)
