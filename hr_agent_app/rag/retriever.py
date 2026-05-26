@@ -1,6 +1,7 @@
 from langchain_core.documents import Document
 
 from hr_agent_app.rag.config import DEFAULT_SEARCH_K, VECTORSTORE_DIR
+from hr_agent_app.rag.hyde import build_hyde_query
 from hr_agent_app.rag.vectorstore import get_vectorstore
 
 
@@ -12,6 +13,15 @@ def search_hr_knowledge(query: str, k: int = DEFAULT_SEARCH_K) -> list[Document]
 
     vectorstore = get_vectorstore()
     return vectorstore.similarity_search(query, k=k)
+
+
+def search_hr_knowledge_hyde(query: str, k: int = DEFAULT_SEARCH_K) -> list[Document]:
+    try:
+        expanded_query = build_hyde_query(query)
+    except Exception:
+        expanded_query = query
+
+    return search_hr_knowledge(expanded_query, k=k)
 
 
 def format_documents(documents: list[Document]) -> str:

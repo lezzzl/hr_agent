@@ -17,6 +17,7 @@ dependencies = [
     "langchain-chroma",
     "langchain-text-splitters",
     "sentence-transformers",
+    "python-telegram-bot",
 ]
 
 [tool.setuptools.packages.find]

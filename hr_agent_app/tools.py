@@ -1,6 +1,6 @@
 from langchain_core.tools import tool
 
-from hr_agent_app.rag.retriever import format_documents, search_hr_knowledge
+from hr_agent_app.rag.retriever import format_documents, search_hr_knowledge_hyde
 from hr_agent_app.scheduling.repository import book_slot, list_available_slots
 
 
@@ -23,7 +23,7 @@ def search_hr_documents(question: str) -> str:
     На выходе возвращаются релевантные фрагменты документов из базы знаний.
     """
     try:
-        documents = search_hr_knowledge(question)
+        documents = search_hr_knowledge_hyde(question)
     except FileNotFoundError:
         return (
             "База знаний ещё не проиндексирована. "
