@@ -14,6 +14,9 @@ dependencies = [
     "langchain-openrouter",
     "python-dotenv",
     "langsmith",
+    "langchain-chroma",
+    "langchain-text-splitters",
+    "sentence-transformers",
 ]
 
 [tool.setuptools.packages.find]

@@ -14,14 +14,14 @@ from hr_agent_app.nodes import (
 )
 from hr_agent_app.state import InterviewState
 from langgraph.prebuilt import ToolNode
-from hr_agent_app.tools import search_hr_documents, book_interview_slot
+from hr_agent_app.tools import book_interview_slot, list_interview_slots, search_hr_documents
 
 
 
 def build_graph(checkpointer=None):
     builder = StateGraph(InterviewState)
 
-    tools = [search_hr_documents, book_interview_slot]
+    tools = [search_hr_documents, list_interview_slots, book_interview_slot]
     tool_node = ToolNode(tools)
 
     builder.add_node("input_check", input_check_node)

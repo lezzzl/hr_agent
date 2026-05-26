@@ -1,6 +1,7 @@
 from langchain_core.tools import tool
 
 from hr_agent_app.rag.retriever import format_documents, search_hr_knowledge
+from hr_agent_app.scheduling.repository import book_slot, list_available_slots
 
 
 @tool
@@ -35,12 +36,58 @@ def search_hr_documents(question: str) -> str:
 
 
 @tool
-def book_interview_slot(request: str) -> str:
+def list_interview_slots(role: str | None = None, limit: int = 5) -> str:
     """
-    Use this tool when candidate wants to book, schedule or reserve an interview slot.
+    Используй этот инструмент, когда кандидат хочет посмотреть доступные слоты для интервью.
+
+    role можно передать, если кандидат спрашивает слот для конкретной роли.
+    limit ограничивает количество возвращаемых слотов.
     """
+    slots = list_available_slots(role=role, limit=limit)
+    if not slots:
+        return "Свободных слотов для интервью сейчас нет."
+
+    lines = ["Свободные слоты для интервью:"]
+    for slot in slots:
+        role_text = f", роль: {slot.role}" if slot.role else ""
+        lines.append(
+            f"{slot.id}. {slot.starts_at}-{slot.ends_at} {slot.timezone}, "
+            f"интервьюер: {slot.interviewer}{role_text}"
+        )
+
+    return "\n".join(lines)
+
+
+@tool
+def book_interview_slot(
+    slot_id: int,
+    candidate_name: str,
+    candidate_contact: str,
+    chat_id: str | None = None,
+) -> str:
+    """
+    Используй этот инструмент, когда кандидат выбрал конкретный слот и хочет записаться на интервью.
+
+    Нужны slot_id, имя кандидата и контакт для связи.
+    """
+    booked = book_slot(
+        slot_id=slot_id,
+        candidate_name=candidate_name,
+        candidate_contact=candidate_contact,
+        chat_id=chat_id,
+    )
+
+    if booked is None:
+        return (
+            "Не удалось забронировать слот: он уже занят или не существует. "
+            "Попросите кандидата выбрать другой свободный слот."
+        )
+
     return (
-        f"Я зафиксировал запрос на слот: {request}. "
-        "Пока интеграция с календарём не подключена, поэтому реальное бронирование "
-        "не выполнено. Позже здесь будет проверка свободных слотов и создание события."
+        "Слот успешно забронирован.\n"
+        f"Слот: {booked.id}\n"
+        f"Время: {booked.starts_at}-{booked.ends_at} {booked.timezone}\n"
+        f"Интервьюер: {booked.interviewer}\n"
+        f"Кандидат: {booked.candidate_name}\n"
+        f"Контакт: {booked.candidate_contact}"
     )

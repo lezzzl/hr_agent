@@ -3,11 +3,11 @@ import json
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 
 from hr_agent_app.config import get_llm
-from hr_agent_app.tools import search_hr_documents, book_interview_slot
+from hr_agent_app.tools import book_interview_slot, list_interview_slots, search_hr_documents
 from hr_agent_app.constants import ALLOWED_ROLES, EMPTY_SKILLS, INTERVIEW_STEPS
 from hr_agent_app.state import InterviewState
 
-tools = [search_hr_documents, book_interview_slot]
+tools = [search_hr_documents, list_interview_slots, book_interview_slot]
 llm = get_llm()
 llm = llm.bind_tools(tools, parallel_tool_calls=False)
 
@@ -67,6 +67,9 @@ def agent_node(state: InterviewState) -> InterviewState:
         Упоминай источники кратко, если tool вернул названия источников.
         Если в найденных фрагментах нет ответа, честно скажи, что информации в базе знаний нет.
         Если ты не знаешь ответ на вопрос, лучше использовать tools, чем придумывать ответ.
+        Если кандидат спрашивает свободные слоты для интервью, используй list_interview_slots.
+        Если кандидат выбрал конкретный слот и дал имя и контакт, используй book_interview_slot.
+        Не бронируй слот без slot_id, имени кандидата и контакта.
         Если ты не знаешь ответ на вопрос, а инструменты не могут помочь, вежливо сообщи кандидату, что не можешь ответить на его вопрос.
     """
     messages = state.get("messages", [])
